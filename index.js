@@ -11,6 +11,9 @@ app.use(bodyParser.json());
 app.use("/product",productRouter)
 app.use("/user",userRouter)
 app.use("/order", orderRouter)
+app.use("/", (req,res)=>{
+    res.status(200).send("Application is running")
+})
 
 
 app.use((req,res)=>{
