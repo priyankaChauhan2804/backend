@@ -133,11 +133,36 @@ const deleteOrder = async (req, res) => {
     }
 }
 
+const getOrderById = async (req, res) => {
+    const orderId = req.params.id;
+    try{
+        const order = await Order.findById(orderId);
+        if (!order) {
+            return res.status(404).json({ message: 'Order not found' });
+          }
+      if (order.user.toString() != req.userId &&
+        req.user.type != 1) {
+        return res.status(403).json({ message: 'Not authorized to access this order' });
+    }
+
+    res.status(200).json({
+        message: 'Order fetched successfully',
+        order: order
+    })
+    }catch(err){
+        console.log("Error", err);
+        res.status(500).json({
+            message: "Error fetching order",
+            error: err.message
+        })
+    }
+}
 
 module.exports = {
     createOrder,
     getAllOrder,
     getAllUserOrder,
     updateOrder,
-    deleteOrder
+    deleteOrder,
+    getOrderById
 }
